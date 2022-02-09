@@ -48,9 +48,12 @@ def step_up(r, c, octopuses, flashed):
 display_octopuses(octopuses)
 print()
 
-steps = 100
+steps = 0
 total_flashed = 0
-for i in range(steps):
+all = len(octopuses) * len(octopuses[0])
+
+while True:
+    steps += 1
     flashed = set()
     for r in range(len(octopuses)):
         for c in range(len(octopuses[0])):
@@ -60,4 +63,9 @@ for i in range(steps):
     display_octopuses(octopuses)
     print()
 
-print(total_flashed)
+    if len(flashed) == all:
+        break
+
+
+
+print(steps)
