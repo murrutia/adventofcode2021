@@ -20,18 +20,43 @@ with open(data_file, 'r') as fd:
         rules.append((pair, letter))
         line = fd.readline().strip()
 
-steps = 4
-# print(template)
+
+def add_letters(string, to_insert, current_index):
+    s = ''
+    string = list(string)
+    letters = list(to_insert.values())
+    indexes = list(to_insert.keys())
+    while len(letters) > 0:
+        letter = letters.pop()
+        index = indexes.pop()
+        while index != current_index:
+            s += string.pop(0)
+            current_index += 1
+
+        s += letter
+    
+    s += ''.join(string)
+    return s
+
+
+def sort_dict(dict):
+    keys = sorted(dict.keys(), reverse=True)
+    d = {}
+    for k in keys:
+        d[k] = dict[k]
+    return d
+
+steps = 20
+
 for step in range(steps):
     found = {}
     for rule in rules:
         for m in re.finditer(f'(?={rule[0]})', template):
             found[m.start() + 1] = rule[1]
-    added = 0
-    for i in sorted(found):
-        template = template[:(i + added)] + found[i] + template[(i + added):]
-        added += 1
-    # print(template)
+    found = sort_dict(found)
+    three = time()
+
+    template = add_letters(template, found, 0)
     
 
 letters = {}
@@ -42,6 +67,7 @@ for x in template:
 
 # print(letters)
 scores = sorted([letters[x] for x in letters])
+# print(template)
 print(scores[-1] - scores[0])
 # print(rules)
 print(time() - start)
